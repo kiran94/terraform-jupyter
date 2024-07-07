@@ -8,7 +8,6 @@ resource "aws_instance" "jupyter" {
   user_data              = file("script.sh")
 }
 
-
 data "aws_ami" "al2" {
   most_recent = true
 
@@ -21,7 +20,7 @@ data "aws_ami" "al2" {
 }
 
 resource "aws_security_group" "jupyter" {
-  name        = "${var.service}-${uuid()}"
+  name        = "${var.service}-sg"
   description = "Security group for ${title(var.service)}"
 
   ingress {
@@ -47,5 +46,3 @@ resource "aws_security_group" "jupyter" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
-
