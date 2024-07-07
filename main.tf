@@ -1,3 +1,14 @@
+
+resource "aws_instance" "jupyter" {
+  ami                    = data.aws_ami.al2.id
+  availability_zone      = var.availability_zone
+  instance_type          = var.instance_type
+  key_name               = aws_key_pair.generated_key.key_name
+  vpc_security_group_ids = ["${aws_security_group.jupyter.id}"]
+  user_data              = file("script.sh")
+}
+
+
 data "aws_ami" "al2" {
   most_recent = true
 
@@ -26,7 +37,7 @@ resource "aws_security_group" "jupyter" {
     to_port     = 8898
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-    description = "${title(var.service)}"
+    description = title(var.service)
   }
 
   egress {
@@ -35,63 +46,6 @@ resource "aws_security_group" "jupyter" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
-  tags = {
-    Contact     = "${var.contact}"
-    Environment = "${title(var.environment)}"
-    Name        = "${var.service}-${uuid()}"
-    Service     = "${title(var.service)}"
-    Terraform   = "true"
-  }
 }
 
-resource "aws_instance" "jupyter" {
-  ami                    = "${data.aws_ami.al2.id}"
-  availability_zone      = "${var.availability_zone}"
-  instance_type          = "${var.instance_type}"
-  key_name               = "${aws_key_pair.generated_key.key_name}"
-  vpc_security_group_ids = ["${aws_security_group.jupyter.id}"]
-  user_data              = "${file("script.sh")}"
 
-  tags = {
-    Name        = "${title(var.service)}-${timestamp()}"
-    Service     = "${title(var.service)}"
-    Contact     = "${var.contact}"
-    Environment = "${title(lower(var.environment))}"
-    Terraform   = "true"
-  }
-
-  volume_tags = {
-    Name        = "${title(var.service)}-${timestamp()}_ROOT"
-    Service     = "${title(var.service)}"
-    Contact     = "${var.contact}"
-    Environment = "${title(lower(var.environment))}"
-    Terraform   = "true"
-  }
-}
-
-resource "aws_ebs_volume" "jupyter" {
-  availability_zone = "${var.availability_zone}"
-  size              = 8
-  type              = "gp2"
-
-  tags = {
-    Name        = "${title(var.service)}-${timestamp()}_Anaconda3"
-    Service     = "${var.service}"
-    Contact     = "${var.contact}"
-    Environment = "${title(lower(var.environment))}"
-    Terraform   = "true"
-  }
-}
-
-resource "aws_volume_attachment" "jupyter" {
-  device_name  = "/dev/sdb"
-  instance_id  = "${aws_instance.jupyter.id}"
-  volume_id    = "${aws_ebs_volume.jupyter.id}"
-  force_detach = true
-}
-
-terraform {
-  backend "local" {
-  }
-}
