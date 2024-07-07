@@ -1,7 +1,7 @@
 
 resource "aws_ebs_volume" "jupyter" {
   availability_zone = var.availability_zone
-  size              = 8
+  size              = var.ebs_volume_size_gb
   type              = "gp2"
 }
 

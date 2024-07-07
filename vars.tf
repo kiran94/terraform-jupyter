@@ -12,6 +12,11 @@ variable "instance_type" {
   default = "t2.micro"
 }
 
+variable "ebs_volume_size_gb" {
+    type = number
+    default = 8
+}
+
 variable "service" {
   type    = string
   default = "jupyter"
