@@ -13,8 +13,8 @@ variable "instance_type" {
 }
 
 variable "ebs_volume_size_gb" {
-    type = number
-    default = 8
+  type    = number
+  default = 8
 }
 
 variable "service" {
