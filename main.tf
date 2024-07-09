@@ -6,6 +6,10 @@ resource "aws_instance" "jupyter" {
   key_name               = aws_key_pair.generated_key.key_name
   vpc_security_group_ids = ["${aws_security_group.jupyter.id}"]
   user_data              = file("script.sh")
+
+  tags = {
+    Name = var.service
+  }
 }
 
 data "aws_ami" "al2" {
