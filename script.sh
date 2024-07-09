@@ -12,15 +12,14 @@ sudo yum install vim tmux jq -y
 
 # Mount the EBS volume into /data
 sudo mkfs.xfs /dev/sdb -f
-sudo mkdir /anaconda3
-sudo mount /dev/sdb /anaconda3
-sudo chown -R ec2-user:ec2-user /anaconda3
-sudo echo "UUID=$(lsblk -nr -o UUID,MOUNTPOINT | grep "/anaconda3" | cut -d ' ' -f 1) /anaconda3 xfs defaults,nofail 1 2" >> /etc/fstab
-# Install Anaconda
-wget https://repo.anaconda.com/archive/Anaconda3-2018.12-Linux-x86_64.sh -O /home/ec2-user/anaconda.sh &&
-    bash /home/ec2-user/anaconda.sh -u -b -p /anaconda3 &&
-    echo 'export PATH="/anaconda3/bin:$PATH"' >> /home/ec2-user/.bashrc &&
-    rm -rf /home/ec2-user/anaconda.sh &&
+sudo mkdir /data
+sudo mount /dev/sdb /data
+sudo chown -R ec2-user:ec2-user /data
+sudo echo "UUID=$(lsblk -nr -o UUID,MOUNTPOINT | grep "/data" | cut -d ' ' -f 1) /data xfs defaults,nofail 1 2" >>/etc/fstab
+
+pip3 install urllib3==1.26.6
+pip3 install jupyterlab
+
 # Configure Jupyter for AWS HTTP
 runuser -l ec2-user -c 'jupyter notebook --generate-config' &&
     sed -i -e "s/#c.NotebookApp.ip = 'localhost'/c.NotebookApp.ip = '"$(curl http://169.254.169.254/latest/meta-data/public-hostname)"'/g" /home/ec2-user/.jupyter/jupyter_notebook_config.py &&
