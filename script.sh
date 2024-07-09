@@ -6,7 +6,11 @@ trap 'exec 2>&4 1>&3' 0 1 2 3
 exec 1>/home/ec2-user/terraform.log 2>&1
 # Update AL2
 sudo yum update -y
-# Mount /anaconda3
+
+# Install Tools
+sudo yum install vim tmux jq -y
+
+# Mount the EBS volume into /data
 sudo mkfs.xfs /dev/sdb -f
 sudo mkdir /anaconda3
 sudo mount /dev/sdb /anaconda3
