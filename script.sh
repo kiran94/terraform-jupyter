@@ -34,4 +34,31 @@ sed -i "s/# c.ServerApp.ip = 'localhost'/c.ServerApp.ip = '"${IP}"'/" $CONFIG_FI
 sed -i "s/# c.ServerApp.allow_origin = ''/c.ServerApp.allow_origin = '*'/g" $CONFIG_FILE
 sed -i "s/# c.ServerApp.open_browser = False/c.ServerApp.open_browser = False/g" $CONFIG_FILE
 
+# Configure Jupyter Logging Levels
+echo "c.Application.log_level = 'WARN'" >>$CONFIG_FILE
+echo "c.ServerApp.log_level = 'WARN'" >>$CONFIG_FILE
+
+# Configure Jupyter Overrides
+JUPYTERLAB_SETTINGS_DIR=/home/ec2-user/.jupyter/lab/user-settings/@jupyterlab/apputils-extension/
+
+runuser -l ec2-user -c "mkdir -p ${JUPYTERLAB_SETTINGS_DIR}"
+
+cat <<EOF >$JUPYTERLAB_SETTINGS_DIR/themes.jupyterlab-settings
+{
+    "theme": "JupyterLab Dark"
+}
+EOF
+
+# Install Pyenv
+sudo yum install gcc make patch zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel tk-devel libffi-devel xz-devel -y
+
+runuser -l ec2-user -c 'curl https://pyenv.run | bash'
+
+echo 'export PYENV_ROOT="$HOME/.pyenv"
+[[ -d "$PYENV_ROOT/bin" ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"' >> /home/ec2-user/.bashrc
+
+echo '. ~/.bashrc' >> /home/ec2-user/.bash_profile
+
 echo 'DONE'
