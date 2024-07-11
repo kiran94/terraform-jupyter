@@ -7,11 +7,9 @@ exec 3>&1 4>&2
 trap 'exec 2>&4 1>&3' 0 1 2 3
 exec 1>/home/ec2-user/terraform.log 2>&1
 
-# Update AL2
-sudo yum update -y
-
 # Install Tools
-sudo yum install vim tmux jq -y
+sudo yum update -y
+sudo yum install vim git tmux jq -y
 
 # Mount the EBS volume into /data
 sudo mkfs.xfs /dev/sdb -f
