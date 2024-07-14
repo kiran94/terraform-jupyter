@@ -56,7 +56,7 @@ This will output a `ssh` command to run.
 jupyter lab
 ```
 
-When you run this you will output like this: 
+When you run this you will see an output that looks like this:
 
 ```bash
 [C 2024-07-13 06:35:14.035 ServerApp]
