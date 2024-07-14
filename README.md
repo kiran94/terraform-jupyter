@@ -69,7 +69,9 @@ When you run this you will see an output that looks like this:
 
 Copy and paste the `http` URL in your browser 🚀
 
-### Launching Jupyter (tmux)
+<details>
+
+<summary>Running in Tmux (Click Me)</summary>
 
 `tmux` comes pre-installed so if you want the jupyter instance to be up irrespective of your `ssh` connection then you can run: 
 
@@ -80,6 +82,8 @@ jupyter lab
 ```
 
 Press `Ctrl+b d` to detach from the `tmux` session. The jupyter process will still be running. You can safely disconnect from the box. When you want to stop the process then just run `tmux a` to get back into the session and `Ctrl+c` to cancel the process.
+
+</details>
 
 ### Using a Different Version of Python
 
