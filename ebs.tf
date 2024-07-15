@@ -3,6 +3,7 @@ resource "aws_ebs_volume" "jupyter" {
   availability_zone = var.availability_zone
   size              = var.ebs_volume_size_gb
   type              = "gp2"
+  tags              = merge(var.tags, local.builtin_tags)
 }
 
 resource "aws_volume_attachment" "jupyter" {

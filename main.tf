@@ -1,4 +1,11 @@
 
+locals {
+  builtin_tags = {
+    Name            = var.service
+    TerraformModule = "terraform-jupyter"
+  }
+}
+
 resource "aws_instance" "jupyter" {
   ami                    = data.aws_ami.al2.id
   availability_zone      = var.availability_zone
@@ -6,10 +13,7 @@ resource "aws_instance" "jupyter" {
   key_name               = aws_key_pair.generated_key.key_name
   vpc_security_group_ids = ["${aws_security_group.jupyter.id}"]
   user_data              = file("${path.module}/script.sh")
-
-  tags = {
-    Name = var.service
-  }
+  tags                   = merge(var.tags, local.builtin_tags)
 }
 
 data "aws_ami" "al2" {
@@ -26,6 +30,7 @@ data "aws_ami" "al2" {
 resource "aws_security_group" "jupyter" {
   name        = "${var.service}-sg"
   description = "Security group for ${title(var.service)}"
+  tags        = merge(var.tags, local.builtin_tags)
 
   ingress {
     from_port   = 22

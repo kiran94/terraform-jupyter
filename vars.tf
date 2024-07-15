@@ -26,3 +26,9 @@ variable "service" {
   description = "The name of the service to deploy. This is a arbitrary label."
   default     = "jupyter"
 }
+
+variable "tags" {
+  type        = map(string)
+  description = "A map of tags to apply to all resources"
+  default     = {}
+}
