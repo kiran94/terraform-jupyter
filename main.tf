@@ -14,6 +14,7 @@ resource "aws_instance" "jupyter" {
   vpc_security_group_ids = ["${aws_security_group.jupyter.id}"]
   user_data              = file("${path.module}/script.sh")
   tags                   = merge(var.tags, local.builtin_tags)
+  iam_instance_profile   = var.iam_instance_profile != null ? var.iam_instance_profile : null
 }
 
 data "aws_ami" "al2" {

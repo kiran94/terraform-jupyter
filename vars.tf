@@ -32,3 +32,9 @@ variable "tags" {
   description = "A map of tags to apply to all resources"
   default     = {}
 }
+
+variable "iam_instance_profile" {
+  type        = string
+  description = "The IAM instance profile to attach to the EC2 instance"
+  default     = null
+}
