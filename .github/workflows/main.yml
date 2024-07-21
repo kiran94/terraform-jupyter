@@ -12,9 +12,16 @@ jobs:
     env:
       working-directory: terraform
     steps:
-      - uses: actions/checkout@v2
+      - name: Install Deps
+        run: |
+          apt update
+          apt upgrade -y
+          apt install unzip
+      - uses: actions/checkout@v4
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.2"
       - name: Initialize
         working-directory: ${{ env.working-directory }}
         run: |
