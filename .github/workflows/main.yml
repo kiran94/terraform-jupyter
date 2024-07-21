@@ -9,8 +9,6 @@ jobs:
   terraform-lint:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    env:
-      working-directory: terraform
     steps:
       - name: Install Deps
         run: |
@@ -23,14 +21,11 @@ jobs:
         with:
           terraform_version: "1.9.2"
       - name: Initialize
-        working-directory: ${{ env.working-directory }}
         run: |
           terraform init -input=false -backend=false
       - name: Check Format
-        working-directory: ${{ env.working-directory }}
         run: |
           terraform fmt -check -no-color
       - name: Validate
-        working-directory: ${{ env.working-directory }}
         run: |
           terraform validate -no-color
