@@ -14,9 +14,9 @@ jobs:
     steps:
       - name: Install Deps
         run: |
-          apt update
-          apt upgrade -y
-          apt install unzip
+          sudo apt update
+          sudo apt upgrade -y
+          sudo apt install unzip
       - uses: actions/checkout@v4
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
