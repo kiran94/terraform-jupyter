@@ -1,0 +1,29 @@
+name: main
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+jobs:
+  terraform-lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      working-directory: terraform
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+      - name: Initialize
+        working-directory: ${{ env.working-directory }}
+        run: |
+          terraform init -input=false -backend=false
+      - name: Check Format
+        working-directory: ${{ env.working-directory }}
+        run: |
+          terraform fmt -check -no-color
+      - name: Validate
+        working-directory: ${{ env.working-directory }}
+        run: |
+          terraform validate -no-color
