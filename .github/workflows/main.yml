@@ -13,7 +13,6 @@ jobs:
       - name: Install Deps
         run: |
           sudo apt update
-          sudo apt upgrade -y
           sudo apt install unzip
       - uses: actions/checkout@v4
       - name: Setup Terraform
