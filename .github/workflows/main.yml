@@ -1,0 +1,30 @@
+name: main
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+jobs:
+  terraform-lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Install Deps
+        run: |
+          sudo apt update
+          sudo apt install unzip
+      - uses: actions/checkout@v4
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.2"
+      - name: Initialize
+        run: |
+          terraform init -input=false -backend=false
+      - name: Check Format
+        run: |
+          terraform fmt -check -no-color
+      - name: Validate
+        run: |
+          terraform validate -no-color
